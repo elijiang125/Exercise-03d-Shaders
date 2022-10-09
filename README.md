@@ -1,8 +1,49 @@
-# Exercise-03d-Shaders
 
+Skip To Content
+
+Elizabeth JiangAccount
+Dashboard
+
+Courses
+
+Groups
+Calendar
+Inbox
+
+History
+Help
+
+FA22-BL-MSCH-C220-10881Assignments
+Fall 2022
+Home
+Syllabus
+Modules
+Assignments
+Discussions
+Quizzes
+Grades
+People
+IT Support 24/7
+IT Support 24/7
+Exercise 03d—Shaders
+Exercise 03d—Shaders
+| Due: Sat Oct 8, 2022 11:59pmDue: Sat Oct 8, 2022 11:59pm
+Ungraded, 10 Possible Points
+10 Possible Points
+Attempt
+Attempt 1
+
+IN PROGRESS
+Next Up: Submit Assignment
+
+Unlimited Attempts Allowed
+Available after Oct 1, 2022 7:00pmAvailable after Oct 1, 2022 7:00pm
+The repository for this exercise is available at https://github.com/BL-MSCH-C220-F22/Exercise-03d-ShadersLinks to an external site.
+
+A demonstration of this exercise is available at https://youtu.be/6hrpde-AzX8Links to an external site.
+
+Exercise-03d-Shaders
 Exercise for MSCH-C220
-
-A demonstration of this exercise is available at [https://youtu.be/6hrpde-AzX8](https://youtu.be/6hrpde-AzX8).
 
 This is the last exercise for you to experiment with juicy features in our brick-breaker game. The exercise will focus on adding shaders to several elements and a face to the paddle.
 
@@ -14,12 +55,9 @@ Open Godot. In the Project Manager, tap the "Import" button. Tap "Browse" and na
 
 If you run the project, you will see a main menu followed by a simple brick-breaker game. We will now have an opportunity to start making it "juicier".
 
----
+Links to an external site.Adding Shaders
+Our first step will be to add some shaders to our project. To make the main menu a bit more visually interesting, we are going to add a shader to the background. Open res://UI/Main_Menu.tscn. Select the Background node. In the Inspector panel, select CanvasItem->Material->Material: New Shader Material. Then Edit the new Shader Material and add a New Shader. Edit that Shader and paste the following into the shader editor that appears at the bottom of the window:
 
-## Adding Shaders
-
-Our first step will be to add some shaders to our project. To make the main menu a bit more visually interesting, we are going to add a shader to the background. Open `res://UI/Main_Menu.tscn`. Select the Background node. In the Inspector panel, select CanvasItem->Material->Material: New Shader Material. Then Edit the new Shader Material and add a New Shader. Edit that Shader and paste the following into the shader editor that appears at the bottom of the window:
-```
 // Water shader
 
 shader_type canvas_item;
@@ -75,14 +113,12 @@ void fragment(){
 	COLOR = withinFoam*FOAM_COL + shadow*WATER2_COL + ((1.0-withinFoam)*(1.0-shadow))*WATER_COL;
 	//COLOR = vec4(1.0,1.0,1.0,fbmval);
 }
-```
-
 When you go back to the 2D view, you should now see the background appear as animating ripples of water.
 
 Next, we will add some shaders when we go into fever mode.
 
-When fever mode starts, we want to add a fire shader to the fever bar. In `res://UI/HUD.tscn`, select the Fever node.  In the Inspector panel, select CanvasItem->Material->Material: New Shader Material. Then Edit the new Shader Material and add a New Shader. Edit that Shader and paste the following into the shader editor that appears at the bottom of the window:
-```
+When fever mode starts, we want to add a fire shader to the fever bar. In res://UI/HUD.tscn, select the Fever node. In the Inspector panel, select CanvasItem->Material->Material: New Shader Material. Then Edit the new Shader Material and add a New Shader. Edit that Shader and paste the following into the shader editor that appears at the bottom of the window:
+
 // Fire shader
 
 shader_type canvas_item;
@@ -166,22 +202,18 @@ void fragment() {
 	vec3 color = finalNoise * vec3(2.*n, 2.*n*n*n, n*n*n*n);
 	COLOR = vec4(color, 1.);
 }
-```
-
 Select the Fever node again, and set CanvasItem->Material->Use Parent Material: on
 
-Then, edit `res://Effects/Fever.gd`. Change `start_fever` to turn on the fire:
-```
+Then, edit res://Effects/Fever.gd. Change start_fever to turn on the fire:
+
 func start_fever():
 	fever()
 	$Timer.start()
 	var fever_indicator = get_node_or_null("/root/Game/UI/HUD/Fever")
 	if fever_indicator != null:
 		fever_indicator.use_parent_material = false
-```
+Then turn it off when we are no longer feverish (in _on_Timer_timeout):
 
-Then turn it off when we are no longer feverish (in `_on_Timer_timeout`):
-```
 func _on_Timer_timeout():
 	if Global.feverish:
 		fever()
@@ -190,25 +222,18 @@ func _on_Timer_timeout():
 		var fever_indicator = get_node_or_null("/root/Game/UI/HUD/Fever")
 		if fever_indicator != null:
 			fever_indicator.use_parent_material = true
-```
-
 When the game is not in fever mode, we would like to make the fever bar a little more colorful.
 
-Edit `res://UI/HUD.gd`. Replace the `update_fever` function with the following:
-```
+Edit res://UI/HUD.gd. Replace the update_fever function with the following:
+
 func update_fever():
 	$Fever.value = Global.fever
 	var styleBox = $Fever.get("custom_styles/fg")
 	styleBox.bg_color.h = fever_h
 	styleBox.bg_color.s = (Global.fever / 100.0) * fever_s
 	styleBox.bg_color.v = (fever_v/2) + ((Global.fever / 100.0) * (fever_v/2)) 
-```
+In res://Game.tscn, select the Background node. In the Inspector panel, select CanvasItem->Material->Material: New Shader Material. Then Edit the new Shader Material and add a New Shader. Edit that Shader and paste the following into the shader editor that appears at the bottom of the window:
 
-
-
-
-In `res://Game.tscn`, select the Background node. In the Inspector panel, select CanvasItem->Material->Material: New Shader Material. Then Edit the new Shader Material and add a New Shader. Edit that Shader and paste the following into the shader editor that appears at the bottom of the window:
-```
 // Fireworks shader
 // Based on shadertoy shader by Martijn Steinrucken aka BigWings - 2015 
 // (https://www.shadertoy.com/view/lscGRl)
@@ -296,12 +321,10 @@ void fragment() {
 	float alpha = 1.0;
 	COLOR = vec4(c, alpha);
 }
-```
-
 Select the Background node again. In the Inspector, set CanvasItem->Material->Use Parent Material: on
 
-Once again, edit `res://Effects/Fever.gd`. Change `start_fever` to start the fireworks:
-```
+Once again, edit res://Effects/Fever.gd. Change start_fever to start the fireworks:
+
 func start_fever():
 	fever()
 	$Timer.start()
@@ -311,10 +334,8 @@ func start_fever():
 	var background = get_node_or_null("/root/Game/Background")
 	if background != null:
 		background.use_parent_material = false
-```
+Then turn them off when we are no longer feverish (in _on_Timer_timeout):
 
-Then turn them off when we are no longer feverish (in `_on_Timer_timeout`):
-```
 func _on_Timer_timeout():
 	if Global.feverish:
 		fever()
@@ -326,15 +347,11 @@ func _on_Timer_timeout():
 		var background = get_node_or_null("/root/Game/Background")
 		if background != null:
 			background.use_parent_material = true
-```
+The fireworks shader requires a lot of computing resources. If that is a problem for your computer, comment out the line that turns it on (#background.use_parent_material = false)
 
-*The fireworks shader requires a lot of computing resources. If that is a problem for your computer, comment out the line that turns it on (`#background.use_parent_material = false`)*
+Links to an external site.Rotating Background Colors
+When we aren't in fever mode, we want the game background color to subtly animate. Add a Tween node as a child of Background and attach a new script (save it as res://Effects/Background.gd):
 
-## Rotating Background Colors
-
-When we aren't in fever mode, we want the game background color to subltly animate. In `res://Game.tscn`, add a Tween node as a child of Background. Then attach the following script to the Background node (save it as `res://Effects/Background.gd`):
-
-```
 extends ColorRect
 
 var c = 0
@@ -357,26 +374,23 @@ func update_color():
 func _on_Tween_tween_all_completed():
 	c = wrapi(c+1, 0, colors.size())
 	update_color()
-```
+Links to an external site.Drawing a face
+In your web browser, go to https://www.piskelapp.com. This is where we will create the images for the paddle's face.
 
-## Drawing a face
-
-In your web browser, go to `https://www.piskelapp.com`. This is where we will create the images for the paddle's face.
-
-The first image is the white part of the eye. Create a new sprite and resize the drawing area (unchecking maintain aspect ratio) to 24 x 39. Then draw and fill a white oval that takes up the remaining area. Decorate it as you see fit, then export it as a PNG, "Spritesheet file export". Rename the resulting file as eye.png and copy it into `res://Assets`.
+The first image is the white part of the eye. Create a new sprite and resize the drawing area (unchecking maintain aspect ratio) to 24 x 39. Then draw and fill a white oval that takes up the remaining area. Decorate it as you see fit, then export it as a PNG, "Spritesheet file export". Rename the resulting file as eye.png and copy it into res://Assets.
 
 Next, still in Piskel, create a new image. Resize it to 15 x 15 and draw and fill a black circle. Export it as a PNG and rename it pupil. Copy it into the Assets folder in your project.
 
 Finally, create a new sprite, and resize it to 50 x 25. Draw and fill a black semi-circle, export it as a PNG, rename it mouth.png, and copy it into the Assets folder.
 
-Back in Godot, open `res://Paddle/Paddle.tscn`. Add a Sprite as a child of the Paddle and name it Eye1. Set its texture as `res://Assets/eye.png`. Then *as a child of Eye1,* add a Node2D and rename it Pupil. Finally, add a Sprite as a child of the Pupil node and set its texture as `res://Assets/pupil.png`. Eye1 should be positioned at 23, -7; the Pupil node and its child Sprite can both remain at 0,0.
+Back in Godot, open res://Paddle/Paddle.tscn. Add a Sprite as a child of the Paddle and name it Eye1. Set its texture as res://Assets/eye.png. Then as a child of Eye1, add a Node2D and rename it Pupil. Finally, add a Sprite as a child of the Pupil node and set its texture as res://Assets/pupil.png. Eye1 should be positioned at 23, -7; the Pupil node and its child Sprite can both remain at 0,0.
 
 Follow that same process for Eye2 Eye2 should be positioned at 73, -7; the Pupil node and its child Sprite can both remain at 0,0.
 
-As a child of Paddle, add a Sprite node and name it Mouth. Its texture should be set to `res://Assets/Mouth.png`. Position the mouth at 49, 26.
+As a child of Paddle, add a Sprite node and name it Mouth. Its texture should be set to res://Assets/Mouth.png. Position the mouth at 49, 26.
 
-To animate the face, edit `res://Paddle/Paddle.gd`. The `_physics_process` callback should be as follows:
-```
+To animate the face, edit res://Paddle/Paddle.gd. The _physics_process callback should be as follows:
+
 func _physics_process(_delta):
 	target.x = clamp(target.x, 0, Global.VP.x - 2*width)
 	position = target
@@ -394,24 +408,19 @@ func _physics_process(_delta):
 		$Eye1/Pupil/Sprite.position.x = 0
 		$Eye2/Pupil/Sprite.position.x = 0
 		$Mouth.scale.y = 1
-```
-
-## WorldEnvironment
-
-In `Game.tscn`, right-click on the Wall_Container node and Change Type. Select CanvasLayer (we don't want the walls to bleed into the rest of the game once we add the WorldEnvironment).
+Links to an external site.WorldEnvironment
+In Game.tscn, right-click on the Wall_Container node and Change Type. Select CanvasLayer (we don't want the walls to bleed into the rest of the game once we add the WorldEnvironment).
 
 Now, right-click on the Game node and Add Child Node. Select WorldEnvironment. Tap on the WorldEnvironment node and in the Inspector, select Envrionment->New Environment. Then Edit that new Enviornment:
- * Background->Mode: Canvas
- * DOF Near Blur->Enabled: On
- * DOF Near Blur->Distance: 1.3
- * Glow->Enabled: On
- * Glow->Bloom: 0.03
- * Glow->Blend Mode: Additive
- * Glow->Bicubic Upscale: ON
 
-*If the Background Mode is set to anything other then Canvas, the results won't be visible. Make sure you don't miss that step.*
-
----
+Background->Mode: Canvas
+DOF Near Blur->Enabled: On
+DOF Near Blur->Distance: 1.3
+Glow->Enabled: On
+Glow->Bloom: 0.03
+Glow->Blend Mode: Additive
+Glow->Bicubic Upscale: ON
+If the Background Mode is set to anything other then Canvas, the results won't be visible. Make sure you don't miss that step.
 
 Test the game and make sure it is working correctly. You should be able to see the combination of all the effects we have added (including fever mode when you click the mouse button).
 
@@ -419,10 +428,10 @@ Quit Godot. In GitHub desktop, you should now see the updated files listed in th
 
 If you return to and refresh your GitHub repository page, you should now see your updated files with the time when they were changed.
 
-Now edit the README.md file. When you have finished editing, commit your changes, and then turn in the URL of the main repository page (https://github.com/[username]/Exercise-03d-Shaders) on Canvas.
+Now edit the README.md file. When you have finished editing, commit your changes, and then turn in the URL of the main repository page (https://github.com/[username]/Exercise-03d-ShadersLinks to an external site.) on Canvas.
 
 The final state of the file should be as follows (replacing my information with yours):
-```
+
 # Exercise-03d-Shaders
 
 Exercise for MSCH-C220
@@ -457,5 +466,4 @@ Power-ups, etc.
 
 ## Created by 
 
-Jason Francis
-```
+Elizabeth Jiang
